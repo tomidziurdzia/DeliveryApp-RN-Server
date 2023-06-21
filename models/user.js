@@ -1,8 +1,10 @@
 import db from "../config/config.js";
+import bcrypt from "bcrypt";
 
 const User = {};
 
-User.create = (user, result) => {
+User.create = async (user, result) => {
+  const hash = await bcrypt.hash(user.password, 10);
   const sql = `
     INSERT INTO users(
         email,
@@ -25,7 +27,7 @@ User.create = (user, result) => {
       user.lastname,
       user.phone,
       user.image,
-      user.password,
+      hash,
       new Date(),
       new Date(),
     ],
